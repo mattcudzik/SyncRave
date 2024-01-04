@@ -1,0 +1,80 @@
+<div class="App">
+    <div class="App__top-bar">
+        <div class="App__header">
+            <div>
+                Welcome to session: {{session?.name}}
+            </div>
+            <div>
+                Join by using pin number: {{session?.sessionInvitation?.code}}
+            </div>
+            <button class="App__user">
+                <div class="App__figure">
+                    <img [src]="session?.owner?.images?.at(0)?.url">
+                </div>
+                <span class="App__username">{{session?.owner?.display_name}}</span>
+            </button>
+        </div>
+    </div>
+    <div class="App__nav-bar">
+        <section class="App__section App__your-shows">
+            <div class="App__section-header">
+              <h3>Next in queue</h3>
+              <img src = "https://cdn-icons-png.flaticon.com/512/25/25429.png" (click)="getQueue()" [ngClass] = "{'rotate': disableQueueButton}">
+            </div>
+            <div class="App__quick-links-container">
+
+              <div class="App__quick-link" *ngFor="let track of queue">
+                <div class="featured-image">
+                    <img [src]="track.album.images.at(0)?.url">
+                </div>
+                <div class="details">
+                    <h3>{{track.name}}</h3>
+                    <span *ngFor="let artist of track.artists">{{artist.name}}</span>
+                    <a [href]="track.url!" class = "getSpotifyTrackButton" target="_blank">
+                        PLAY ON SPOTIFY
+                        <img src="assets/Spotify_Icon_RGB_Black.png">
+                    </a>
+                </div>
+              </div>
+
+            </div>
+        </section>
+    </div>
+    <div class="App__main-view" [style.max-height] = "isAdmin ? 'calc(100vh - var(--now-playing-bar-height))' : '100vh'">
+        <div class="App__top-gradient"></div>
+        <div class="App__header-placeholder"></div>
+        <app-search [sessionId]="id" class="App__section App__quick-links"></app-search>
+    </div>
+    <div class="App__guest-bar">
+        <section class="App__section App__your-shows">
+            <div class ="tooltip">
+                <button [disabled]="playlistURL == null" (click)="onPlaylistButton()">
+                    get playlist
+                    <img src="assets/Spotify_Icon_RGB_Black.png">
+                </button>
+                <span [hidden]="playlistURL != null" class="tooltiptext">owner turned off playlist</span>
+            </div>
+            
+            <div class="App__section-header">
+              <h3>Guests</h3>
+            </div>
+            <div class="App__quick-links-container">
+
+              <div class="App__quick-link" *ngFor="let guest of session?.guests">
+                <div class="details">
+                    <h3>{{guest.nickname}}</h3>
+                    <span *ngIf="session?.properties?.max_songs_per_guest != -1">
+                        {{guest.num_songs_added}} / {{session?.properties?.max_songs_per_guest}}
+                    </span>
+                </div>
+              </div>
+
+            </div>
+        </section>
+    </div>
+    <div class="App__now-playing-bar" *ngIf="isAdmin">
+        <app-player style="flex:1"></app-player>
+        <button (click)="onTVMode()">TVMODE</button>
+    </div>
+</div>
+

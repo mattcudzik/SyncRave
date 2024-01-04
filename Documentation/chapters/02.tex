@@ -1,0 +1,49 @@
+\chapter{Analiza tematu}
+
+\section{Sformułowanie problemu}
+Brak skutecznego narzędzia do zarządzania listą odtwarzania w czasie rzeczywistym podczas wydarzeń jest problematyczne dla organizatorów. Głównym wyzwaniem jest stworzenie aplikacji, która umożliwi wszystkim uczestnikom wydarzenia czynny udział w tworzeniu wspólnej atmosfery oraz płynne odtwarzanie muzyki zgodnie z ich preferencjami, jednocześnie zapewniając pełną kontrolę organizatorowi.
+
+\section{Osadzenie tematu w kontekście aktualnego stanu wiedzy (\english{state of the art}) o poruszanym problemie}
+
+\begin{Definition}\label{def:1}
+Aplikacja internetową możemy zdefiniować jako program komputerowy uruchamiany w przeglądarce internetowej, komunikujący się z serwerem udostępniającym usługi i zasoby za pomocą sieci internetowej.
+\end{Definition}
+
+Aplikacja internetowa rożni się od strony internetowej tym, że kładzie nacisk na interaktywność z użytkownikiem, a strona ma na celu przekazywanie statycznych informacji.
+
+Jedną z częściej stosowanych strategii, planując architekturę takiego systemu jest zastosowanie architektury wielowarstwowej. W tym przypadku zastosowany został model trójwarstwowy, który dzieli system na oddzielne byty:
+\begin{itemize}
+\item warstwa prezentacji - najwyższa warstwa odpowiedzialna za interakcję z użytkownikiem. Wyświetla informacje i komunikuje się z niższą warstwą.
+\item warstwa usług - implementuje logikę biznesową aplikacji. Komunikuje się z bazą danych, przetwarza otrzymane dane oraz zwraca klientowi wyniki.
+\item warstwa danych - przechowuje oraz pozyskuje dane potrzebne do poprawnego funkcjonowania aplikacji. Komunikuje się z warstwą usług przez zapytania w języku SQL.
+\end{itemize}
+Realizacja takich systemów wymaga infrastruktury w tym jednego lub kilku serwerów, które będą dostarczały funkcjonalność użytkownikom. Zaletą takiego rozwiązania jest wysoka skalowalność, ponieważ każda z warstw to osobna aplikacja mogąca funkcjonować na osobnym serwerach co może też pozytywnie na wydajność systemu. Dodatkowym atutem jest także uniezależnienie od technologii, w której dana warstwa została zaimplementowana.
+
+Komunikacja między warstwą prezentacji a warstwą usług określona jest przez protokół HTTP, który charakteryzuje się tym, że klient wysyła żądania do serwera, który udziela na nie odpowiedzi. Format żądań i odpowiedzi jest ściśle zdefiniowany:
+\begin{itemize}
+\item Sekcja nagłówków - zawiera dodatkowe informacje o żądaniu, takie jak metodę autoryzacji, czy oczekiwany format odpowiedzi itp.
+\item Rodzaj metody - informuje serwer o rodzaju działania, które klient chce podjąć. Przykładowo DELETE usunie dane a POST je wyśle.
+\item Adres URL - określa adres zasobu, który klient chce pozyskać.
+\item Kody odpowiedzi - serwer wysyłając odpowiedź dodaje także kod informujący o stanie wyniku żądania. Kod 200 oznacza, że operacja zakończyła się pomyślnie a kod 500 informuje o wewnętrznym błędzie serwera.
+\item Bezstanowość - oznacza to, że realizacja każdego żądania nie wpływa na wynik kolejnego oraz są one realizowane niezależnie od siebie.
+\item Treść - najczęściej jest to obiekt typu JSON lub XML. Może nie występować w każdym zapytaniu.
+\end{itemize}
+
+
+\section{Studia literaturowe}
+
+\subsection{Opis znanych rozwiązań}
+
+\begin{itemize}
+\item Spotify Jam \cite{bib:spotify_jam}
+
+Narzędzie umożliwia zakładanie sesji oraz dołączanie do nich, co pozwala użytkownikom wspólnie słuchać muzyki. Dostęp do tego rozwiązania jest oferowany przez platformę Spotify, jednak użytkownik zakładający sesję musi posiadać płatne konto premium. System nakłada ograniczenie, wymagając od dołączających posiadania urządzenia mobilnego (takiego jak telefon czy tablet) z zainstalowaną aplikacją z zalogowanym kontem Spotify. Dołączenie jest możliwe poprzez zeskanowanie kodu QR, kliknięcie w udostępniony link lub zaakceptowanie zaproszenia od właściciela sesji. Maksymalna liczba uczestników jest ograniczona do 32 osób. Dodatkowo właściciel sesji ma możliwość usuwania użytkowników, którzy już dołączyli oraz nadania gościom uprawnień do sterowania głośnością urządzenia odtwarzającego muzykę.
+
+\item Festify \cite{bib:festify}
+
+Festify to aplikacja umożliwiająca zakładanie oraz dołączanie do sesji. Dostęp do platformy wymaga posiadania konta premium w serwisie Spotify przez osobę zakładającą sesję. Dużym atutem tego rozwiązania są szerokie możliwości interakcji gości sesji z kolejką odtwarzania takie jak głosowanie na utwory, aby zostały szybciej odtworzone oraz dodawanie utworów przez gości. Platforma na podstawie utworów w kolejce proponuje podobne utwory.
+
+\end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+

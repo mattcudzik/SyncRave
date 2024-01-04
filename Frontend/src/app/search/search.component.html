@@ -1,0 +1,36 @@
+<div class="container">
+    <form [formGroup]="searchForm" class="App__section-header">
+        <input type="search" formControlName="query" placeholder="Search for songs...">
+        <button (click)="onSearch()">SEARCH</button>
+    </form>
+    <div class="App__section-header">
+        <h2>Results:</h2>
+    </div>
+    <app-loading [hidden]="!waitningForSearchResponse"></app-loading>
+    <div [hidden]="!(results.length == 0)">Search for songs to add to the queue.</div>
+    <div class="App__quick-links-container">
+        <div class="App__quick-link" *ngFor="let track of results">
+            <div class="featured-image">
+                <img [src]="track.album.images.at(0)?.url">
+            </div>
+            <div class="details">
+                <h3>{{track.name}}</h3>
+                <span *ngFor="let artist of track.artists">{{artist.name}} </span>
+                <a [href]="track.url" class = "getSpotifyTrackButton" target="_blank">
+                    PLAY ON SPOTIFY
+                    <img src="assets/Spotify_Icon_RGB_Black.png">
+                </a>
+            </div>
+            <button (click)="onAddSong(track)" [disabled]="disableAddButtons" class="addButton">
+                <img src="https://cdn-icons-png.flaticon.com/512/1828/1828919.png">
+            </button>
+        </div>
+    </div>
+    <div class="App__section-header">
+        <button (click)="onPreviousPage()">&LeftArrow;</button>
+        <button (click)="onNextPage()">&RightArrow;</button>
+    </div>
+    
+</div>
+
+

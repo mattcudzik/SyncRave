@@ -1,0 +1,8 @@
+{
+   "/platform/profilepic/*":{
+      "target": "https://platform-lookaside.fbsbx.com",
+      "changeOrigin": true,
+      "secure": false,
+      "logLevel": "debug"
+   }
+}

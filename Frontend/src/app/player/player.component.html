@@ -1,0 +1,45 @@
+<div class="function">
+    <div class="music">
+        <img [src]="this.currentPlayerState?.item?.album?.images?.at(0)?.url"/>
+            <div class="details">
+              <div class="name">{{this.currentPlayerState?.item?.name}}</div>
+              <div class="artist">
+                <span *ngFor="let artist of this.currentPlayerState?.item?.artists; let isLast=last" >
+                    {{artist.name}}
+                    <ng-component *ngIf="!isLast">, </ng-component>
+                </span>
+              </div>
+            </div>
+    </div>
+
+    <div class="playback">
+        <div class="upper">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/3318/3318703.png"
+            alt="back"
+            (click)="onPrevius()"
+          />
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/2088/2088562.png"
+            alt="pause"
+            class="pause"
+            (click)="onPlayPause()"
+          />
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/4211/4211386.png"
+            alt="forward"
+            (click)="onNext()"
+          />
+        </div>
+      </div>
+      <div class="control">
+        <div class="images">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/25/25695.png"
+            alt="volume"
+          />
+          <input type="range" min="0" max="100" (change)="onChangeVolume($event)">
+        </div>
+</div>
+
+

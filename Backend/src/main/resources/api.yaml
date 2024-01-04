@@ -1,0 +1,805 @@
+openapi: '3.0.1'
+info:
+  title: 'Spotify Playlist Co-creation app'
+  version: 1.0.0
+servers:
+  - url: 'http://{address}:{port}/api'
+    variables:
+      address:
+        default: 'localhost'
+      port:
+        default: '8080'
+paths:
+
+  /auth/callback:
+    get:
+      summary: Callback from Spotify Authorization.
+      operationId: 'callback'
+      tags:
+        - auth
+
+      security: []
+
+      parameters:
+        - name: code
+          required: false
+          in: query
+          schema:
+            type: string
+
+        - name: error
+          required: false
+          in: query
+          schema:
+            type: string
+
+        - name: state
+          required: false
+          in: query
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: access token for authorized user or error message
+
+  /auth/user:
+    get:
+      summary: Returns URL to redirect user to authenticate their Spotify Account.
+      tags:
+        - auth
+
+      security: []
+
+      operationId: 'authUser'
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: URL to redirect user to authenticate their Spotify Account.
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /auth/guest:
+    post:
+      summary: Authorizes user to join given session.
+      operationId: 'authGuest'
+      tags:
+        - auth
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GuestAuthRequestDTO'
+
+      responses:
+        '200':
+          description: Successfully authorized, returns access token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetSessionDTO"
+        '400':
+          description: Bad Request - invalid session code
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: error message
+
+  /session:
+    post:
+      summary: Create a new session.
+      operationId: 'createSession'
+      tags:
+        - session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddSessionDTO'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetSessionDTO"
+
+
+    get:
+      summary: Get users sessions.
+      operationId: 'getSesssions'
+
+      tags:
+        - session
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetSessionDTO'
+
+  /session/{session_id}:
+    get:
+      summary: Get users session by id.
+      operationId: 'getSessionById'
+
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+      tags:
+        - session
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/GetSessionDTO'
+
+    delete:
+      summary: Delete users session by id.
+      operationId: 'deleteSesssionById'
+
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+      tags:
+        - session
+      responses:
+        '200':
+          description: OK
+
+  
+  /session/{session_id}/properties:
+    put:
+      summary: Set session properties
+      operationId: 'setSessionProperties'
+      tags:
+        - session
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionPropertiesDTO'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionPropertiesDTO"
+
+
+  /session/{session_id}/queue:
+    get:
+      summary: Get current queue
+      operationId: 'getSessionQueue'
+      tags:
+        - session
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TrackObjectDTO"
+
+
+  /session/{session_id}/queue/song:
+    get:
+      summary: Get current song from queue
+      operationId: 'getCurrentSong'
+      tags:
+        - session
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrentPlayerStateDTO'
+
+    post:
+      summary: Add new song to queue
+      operationId: 'addSongToQueue'
+      tags:
+        - session
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddSongDTO'
+      responses:
+        '200':
+          description: OK
+  
+  /session/{session_id}/playlist:
+    get:
+      summary: Get playlist with session tracks.
+      operationId: 'getSessionPlaylist'
+      tags:
+        - session
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+                format: url
+                description: link to spotify playlist with tracks added in session
+        
+        '404':
+          description: Owner didn't allow to generate a playlist
+
+
+  /search:
+    get:
+      summary: search for song
+      operationId: 'searchSpotify'
+      tags:
+        - search
+      parameters:
+        - name : q
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Query to search for
+
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            minimum: 0
+            maximum: 50
+          description: Number of results to return
+
+        - name: offset
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+            maximum: 1000
+          in: query
+          description: Offset for results
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:  
+              schema: 
+                type: array
+                items:
+                  $ref: "#/components/schemas/TrackObjectDTO"
+
+  /me:
+    get:
+      summary: Get Spotify user info
+      operationId: 'getSpotifyUser'
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SpotifyUserDTO"
+
+  /me/player/next:
+    put:
+      summary: Skip current song
+      operationId: 'skipSong'
+      tags:
+        - player
+      responses:
+        '200':
+          description: OK
+
+  /me/player/previous:
+    put:
+      summary: Previous song
+      operationId: 'previousSong'
+      tags:
+        - player
+      responses:
+        '200':
+          description: OK
+
+  /me/player/pause:
+    put:
+      summary: Pause current song
+      operationId: 'pauseSong'
+      tags:
+        - player
+      responses:
+        '200':
+          description: OK
+
+  /me/player/state:
+    put:
+      summary: Get player state
+      operationId: 'getState'
+      tags:
+        - player
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrentPlayerStateDTO'
+
+  /me/player/play:
+    put:
+      summary: Start/Resume current song
+      operationId: 'playSong'
+      tags:
+        - player
+      responses:
+        '200':
+          description: OK
+
+  /me/player/volume:
+    put:
+      summary: Set playback volume
+      operationId: 'setVolume'
+      tags:
+        - player
+      parameters:
+        - name: volume_percentage
+          required: true
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 100
+            description: Volume in
+
+      responses:
+        '200':
+          description: OK
+
+components:
+
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+
+  schemas:
+
+    AddSessionDTO:
+      description: Session Entity
+
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 5
+          maxLength: 20
+          pattern: "^[a-zA-Z0-9 ]+$"
+          description: Name of session
+
+        properties:
+          $ref: '#/components/schemas/SessionPropertiesDTO'
+
+      required:
+        - name
+
+    GetSessionDTO:
+      description: Session Entity
+
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of session
+
+        id:
+          type: string
+          format: uuid
+          description: Session ID
+
+        created:
+          type: string
+          format: date
+          description: Created
+
+        properties:
+          $ref: "#/components/schemas/SessionPropertiesDTO"
+          description: Properties of a session
+
+        owner:
+          $ref: "#/components/schemas/SpotifyUserDTO"
+          description: Spotify data of session owner
+
+        sessionInvitation:
+          $ref: "#/components/schemas/SessionInvitationDTO"
+          description: Ways to join session
+
+        guests:
+          type: array
+          items:
+            $ref: "#/components/schemas/GetGuestDTO"
+          description: Guests that joined session
+
+        currentPlayerState:
+          $ref: "#/components/schemas/CurrentPlayerStateDTO"
+          description: Current spotify player state
+
+      required:
+        - name
+        - id
+        - created
+        - properties
+        - owner
+        - guests
+        - currentPlayerState
+        - sessionInvitation
+
+    GetGuestDTO:
+      description: Guest Entity
+
+      type: object
+      properties:
+        nickname:
+          type: string
+        
+        num_songs_added:
+          type: integer
+          format: int64
+
+      required:
+        - nickname
+
+    SessionInvitationDTO:
+      description: Invitation Entity
+
+      type: object
+      properties:
+        code:
+          type: string
+          description: Invitation code
+
+        qrCode:
+          type: string
+          format: byte
+          description: QR code
+
+      required:
+        - code
+        - qrCode
+
+    SessionPropertiesDTO:
+      description: Properties of a session
+
+      type: object
+      properties:
+        max_songs_per_guest:
+          type: integer
+          default: -1
+          minimum: -1
+          maximum: 10000000
+          description: Maximum number of songs a guest can add to queue
+
+        max_number_of_guests:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 100
+          description: Maximum number of guests that can join the session
+        
+        ban_explicit_content:
+          type: boolean
+          default: false
+          description: Should explicit content be forbidden to be added to session
+
+        banned_genres:
+          type: array
+          items:
+            type: string
+          default: []
+          description: List of banned genres
+        
+        generate_playlist:
+          type: boolean
+          default: true
+          description: Should app generate and add to owners account playlist with all tracks that were added via session
+
+    GuestAuthRequestDTO:
+      description: Properties of a guest
+
+      type: object
+      properties:
+        nickname:
+          type: string
+          description: Guest nickname
+          minLength: 4
+          maxLength: 10
+          pattern: "^[a-zA-Z0-9]+$"
+        invitation_code:
+          type: string
+          minLength: 6
+          maxLength: 6
+          pattern: "^[a-zA-Z0-9]+$"
+          description: Invitation code
+
+    AddSongDTO:
+      description: Song to add to queue
+
+      type: object
+      properties:
+        id:
+          type: string
+          description: SpotifyID of song
+
+    CurrentPlayerStateDTO:
+      description: Spotify Player State Entity
+
+      type: object
+      required:
+        - timestamp
+        - progress_ms
+        - is_playing
+        - item
+
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+          description: Unix Millisecond Timestamp when data was fetched.
+        progress_ms:
+          type: integer
+          description: Progress into the currently playing track or episode. Can be `null`.
+        is_playing:
+          type: boolean
+          description: If something is currently playing, return `true`.
+        item:
+          $ref: '#/components/schemas/TrackObjectDTO'
+
+    SpotifyUserDTO:
+      type: object
+
+      properties:
+        display_name:
+          type: string
+          description: |
+            The name displayed on the user's profile. `null` if not available.
+        href:
+          type: string
+          description: |
+            A link to the Web API endpoint for this user.
+        id:
+          type: string
+          description: |
+            The [Spotify user ID](/documentation/web-api/concepts/spotify-uris-ids) for this user.
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImageObjectDTO'
+          description: |
+            The user's profile image.
+        uri:
+          type: string
+          description: |
+            The [Spotify URI](/documentation/web-api/concepts/spotify-uris-ids) for this user.
+
+      required:
+        - href
+        - id
+        - images
+        - uri
+
+    TrackObjectDTO:
+      type: object
+
+      required:
+        - album
+        - artists
+        - duration_ms
+        - href
+        - id
+        - name
+        - uri
+
+      properties:
+        album:
+          allOf:
+            - $ref: '#/components/schemas/AlbumObjectDTO'
+          description: |
+            The album on which the track appears. The album object includes a link in `href` to full information about the album.
+        artists:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArtistObjectDTO'
+          description: |
+            The artists who performed the track. Each artist object includes a link in `href` to more detailed information about the artist.
+        duration_ms:
+          type: integer
+          description: |
+            The track length in milliseconds.
+        href:
+          type: string
+          description: |
+            A link to the Web API endpoint providing full details of the track.
+        id:
+          type: string
+          description: |
+            The [Spotify ID](/documentation/web-api/concepts/spotify-uris-ids) for the track.
+        name:
+          type: string
+          description: |
+            The name of the track.
+        uri:
+          type: string
+          description: |
+            The [Spotify URI](/documentation/web-api/concepts/spotify-uris-ids) for the track.
+        url:
+          type: string
+          description: |
+            The [Spotify URL](/documentation/web-api/concepts/spotify-uris-ids) for the object.
+
+    AlbumObjectDTO:
+      type: object
+      required:
+        - artists
+        - id
+        - name
+        - release_date
+        - images
+        - uri
+        - url
+
+      properties:
+        artists:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArtistObjectDTO'
+          description: |
+            The artists of the album. Each artist object includes a link in `href` to more detailed information about the artist.
+
+        id:
+          type: string
+          description: |
+            The [Spotify ID](/documentation/web-api/concepts/spotify-uris-ids) for the album.
+          example: 2up3OPMp9Tb4dAKM2erWXQ
+        name:
+          type: string
+          description: |
+            The name of the album. In case of an album takedown, the value may be an empty string.
+        release_date:
+          type: string
+          example: '1981-12'
+          description: |
+            The date the album was first released.
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImageObjectDTO'
+          description: |
+            The cover art for the album in various sizes, widest first.
+        uri:
+          type: string
+          example: 'spotify:album:2up3OPMp9Tb4dAKM2erWXQ'
+          description: |
+            The [Spotify URI](/documentation/web-api/concepts/spotify-uris-ids) for the album.
+
+    ArtistObjectDTO:
+      type: object
+      properties:
+        href:
+          type: string
+          description: |
+            A link to the Web API endpoint providing full details of the artist.
+        id:
+          type: string
+          description: |
+            The [Spotify ID](/documentation/web-api/concepts/spotify-uris-ids) for the artist.
+        name:
+          type: string
+          description: |
+            The name of the artist.
+        uri:
+          type: string
+          description: |
+            The [Spotify URI](/documentation/web-api/concepts/spotify-uris-ids) for the artist.
+
+    ImageObjectDTO:
+      type: object
+      required:
+        - url
+        - height
+        - width
+      properties:
+        url:
+          type: string
+          example: |
+            https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228
+          description: |
+            The source URL of the image.
+        height:
+          type: integer
+          example: 300
+          description: |
+            The image height in pixels.
+        width:
+          type: integer
+          example: 300
+          description: |
+            The image width in pixels.
+
+
+security:
+  - bearerAuth: []

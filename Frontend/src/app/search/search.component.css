@@ -1,0 +1,87 @@
+.details {
+    max-width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.featured-image img {
+    width: 100%;
+    height: 100%;
+}
+
+.featured-image {
+    width: 10vh;
+    height: 10vh;
+    border-radius: 4px;
+    background-size: cover;
+    box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.5);
+    margin-right: 20px;
+    margin-left: 10px;
+}
+
+.App__quick-links-container {
+    grid-template-columns: auto auto;
+    padding: 20px;
+}
+
+.App__quick-link {
+    height: 100px;
+    background-color: rgba(50, 50, 50, 0.6);
+}
+
+.container {
+    padding: 25px;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+input[type=search]{
+    width: 70%;
+    border: none;
+    border-radius: 20px;
+    outline: none; 
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); 
+    padding: 10px;
+}
+
+.addButton {
+    height: 70%;
+    background-color: unset;
+    border: 0;
+    margin-left: auto;
+    margin-right: 5%;  
+}
+
+.addButton img{
+    filter: invert(100%);
+    height: 100%;
+}
+
+.addButton img:hover {
+    transform: scale(0.95);
+    cursor: pointer;
+}
+
+.addButton:disabled img {
+    opacity: 0.5;
+}
+
+.getSpotifyTrackButton {
+    background-color: white;
+    width: 170px;
+    border-radius: 20px;
+    height: 28px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    font-size: 14px;
+    margin-top: 8px;
+  }
+  .getSpotifyTrackButton img{
+    height: 60%;
+  }

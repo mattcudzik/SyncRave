@@ -1,0 +1,52 @@
+<div class="App__main-view">
+    <div class="App__top-gradient"></div>
+    <section>
+        <div class="signin">
+            <div class="content"> 
+             <h2>Join Session</h2> 
+            <form [formGroup]="joinSessionForm" class="form">
+                
+                <div class="errorMsg" *ngIf="joinSessionForm.get('nickname')?.touched && joinSessionForm.get('nickname')?.invalid">
+                    <div *ngIf="joinSessionForm.get('nickname')?.hasError('required')">Nickname is required.</div>
+                    <div *ngIf="joinSessionForm.get('nickname')?.hasError('minlength')">Nickname should be at least 4 characters.</div>
+                    <div *ngIf="joinSessionForm.get('nickname')?.hasError('maxlength')">Nickname should not exceed 10 characters.</div>
+                    <div *ngIf="joinSessionForm.get('nickname')?.hasError('pattern')">Nickname should contain only letters and numbers.</div>
+                </div>
+                <div class="inputBox"> 
+                    <input type="text" required formControlName="nickname"> <i>nickname</i> 
+                </div> 
+
+                <div class="errorMsg" *ngIf="joinSessionForm.get('pin')?.touched && joinSessionForm.get('pin')?.invalid">
+                    <div *ngIf="joinSessionForm.get('pin')?.hasError('required')">PIN is required.</div>
+                    <div *ngIf="joinSessionForm.get('pin')?.hasError('minlength')">PIN should be at least 6 characters.</div>
+                    <div *ngIf="joinSessionForm.get('pin')?.hasError('maxlength')">PIN should not exceed 6 characters.</div>
+                    <div *ngIf="joinSessionForm.get('pin')?.hasError('pattern')">PIN should contain only letters and numbers.</div>
+                </div>
+
+                <div class="inputBox"> 
+                    <input type="text" required formControlName="pin"> <i>entry code</i> 
+                </div> 
+
+                <div class="errorMsg" *ngIf="errorMessage != undefined">
+                    {{errorMessage}}
+                </div>
+
+                <div class="inputBox"> 
+                    <input type="submit" value="JOIN" (click)="onAuthorizeGuest()" [disabled]="joinSessionForm.invalid || disableSendButton"> 
+                </div> 
+            </form> 
+            </div> 
+            <div class="content"> 
+                <h2>OR</h2>
+            </div>
+            <div class="content"> 
+                <h2>Create session</h2> 
+                   <div  class="form">
+                       <div class="inputBox"> 
+                           <input type="submit" value="CREATE" (click)="onAuthorizeSpotify()" [disabled]="disableSendButton"> 
+                       </div> 
+                    </div> 
+               </div>
+        </div>
+    </section>
+</div>

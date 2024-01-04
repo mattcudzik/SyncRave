@@ -1,0 +1,261 @@
+
+
+
+.App__quick-links-container {
+    display: grid;
+    gap: 24px;
+    margin-top: 16px;
+    grid-template: none;
+    max-width: 800px;
+}
+
+.App__quick-link {
+justify-content: center;
+}
+
+.App__quick-link-item {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.App__quick-link :hover {
+    cursor: pointer;
+}
+
+.App__quick-link-item img {
+    height: 50px;
+    filter: invert(1);
+}
+
+.App{
+    grid-template-areas: "main-view nav-bar" "now-playing-bar now-playing-bar";
+    grid-template-columns: 1fr auto;
+    --vertical-nav-width: 45vw;
+}
+
+.App__nav-bar {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.App__categories-nav {
+
+    /* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+input[type=checkbox] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    z-index: 10;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+}
+.checkboxInputBox i {
+    left: 0;
+    padding: 15px 10px;
+    color: #fff;
+    font-weight: 500;
+    font-size: 1em;
+    font-style: normal;
+}
+
+.checkboxInputBox {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.checkboxInputBox:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+.checkboxInputBox input:checked ~ .checkmark {
+    background-color: #1db954;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+.checkboxInputBox input:checked ~ .checkmark:after {
+    display: block;
+  }
+
+  .checkboxInputBox .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+section 
+{
+  width: var(--vertical-nav-width);
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+
+section .signin
+{
+  background: #000;  
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  border-radius: 4px;
+  box-shadow: 0 15px 35px rgba(0,0,0,9);
+}
+section .signin .content 
+{
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 40px;
+}
+section .signin .content h2 
+{
+  font-size: 2em;
+  color: #fff;
+  text-transform: uppercase;
+}
+section .signin .content .form 
+{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+section .signin .content .form .inputBox
+{
+  position: relative;
+  width: 100%;
+}
+section .signin .content .form .inputBox input 
+{
+  position: relative;
+  width: 100%;
+  background: #121212;
+  border: none;
+  outline: none;
+  padding: 25px 10px 7.5px;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: 500;
+  font-size: 1em;
+}
+section .signin .content .form .inputBox i 
+{
+  position: absolute;
+  left: 0;
+  padding: 15px 10px;
+  font-style: normal;
+  color: #aaa;
+  transition: 0.5s;
+  pointer-events: none;
+}
+.signin .content .form .inputBox input[type="submit"]
+{
+  padding: 10px !important;
+  background: #fff;
+  color: #000;
+  font-weight: 600;
+  font-size: 1.35em;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+}
+.signin .content .form .inputBox input[type="submit"] :not(:disabled) :active
+{
+    transform: scale(0.96); 
+}
+
+.signin .content .form .inputBox input[type="submit"]:disabled
+{
+  background: #393939;  
+  cursor: not-allowed;
+}
+
+.signin .content .form .inputBox input[type="submit"]:not([disabled]):hover
+{
+    background: #1db954 !important;
+}
+
+.signin .content .form .inputBox input:focus ~ i,
+.signin .content .form .inputBox input:valid ~ i
+{
+  transform: translateY(-7.5px);
+  font-size: 0.8em;
+  color: #fff;
+}
+.signin .content .form .links 
+{
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.signin .content .form .links a 
+{
+  color: #fff;
+  text-decoration: none;
+}
+.signin .content .form .links a:nth-child(2)
+{
+  color: #fff;
+  font-weight: 600;
+}
+
+
+}
+
+
+
+.errorMsg {
+  color: #d93a3a;
+  font-size: 0.9em;
+}

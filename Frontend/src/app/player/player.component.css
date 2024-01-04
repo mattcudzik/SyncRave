@@ -1,0 +1,75 @@
+.playback img :hover {
+    cursor: pointer;
+    border-radius: 0;
+}
+
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 1vh;
+    border-radius: 10px;
+    background: white;
+    outline: none;
+    margin: 10px 0;
+  }
+  
+  /* Styling for the track */
+  input[type="range"]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 8px;
+    cursor: pointer;
+    background: #aaa;
+    border-radius: 5px;
+  }
+  
+  /* Styling for the thumb/handle */
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #007bff;
+    cursor: pointer;
+  }
+  
+  /* Additional styling for Firefox */
+  input[type="range"]::-moz-range-track {
+    width: 100%;
+    height: 8px;
+    cursor: grab;
+    border-radius: 5px;
+  }
+  
+  input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #1db954;
+    cursor: pointer;
+  }
+  
+  /* Additional styling for Edge */
+  input[type="range"]::-ms-track {
+    width: 100%;
+    height: 8px;
+    cursor: pointer;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+  }
+
+  .function {
+    width: unset;
+    .music {
+        width: 30%;
+    }
+    .playback {
+        width: 50%;
+    }
+    .control {
+        width: 20%;
+    }
+  }

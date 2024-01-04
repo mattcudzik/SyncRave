@@ -1,0 +1,196 @@
+.App__guest-bar {
+
+    grid-area: guest-bar;
+    width: var(--vertical-guest-width);
+    height: 100%;
+    min-height: 100%;
+    padding-top: 24px;
+    padding-bottom: var(--now-playing-bar-height);
+    background-color: black;
+
+    overflow-x: hidden;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    
+    .App__quick-link {
+        height: 50px;
+        padding: 5px;
+        padding-left: 15px;
+    }
+
+    .App__quick-links-container {
+        grid-template-columns: unset;
+    }
+
+}
+
+.App__now-playing-bar {
+    display: flex;
+    background-color: rgb(27, 27, 27);
+    justify-content: space-between;
+}
+
+.App {
+    grid-template-areas:
+"nav-bar         main-view       guest-bar     " 
+"now-playing-bar now-playing-bar now-playing-bar";
+  grid-template-columns: auto 1fr auto;
+  --vertical-nav-width: 25vw;
+  --vertical-guest-width: 15vw;
+}
+
+.App__user{
+    height: 64px;
+    border-radius: 32px;
+    padding: 8px;
+    min-width: 240px;
+}
+
+.App__username {
+    font-size: 1.5em;
+}
+
+.App__figure img {
+    width: 100%;
+    border-radius: 100%;
+}
+
+.App__figure {
+    width: 50px;
+    height: 50px;
+}
+
+.App__quick-link {
+    height: 100px;
+    background-color: rgba(50, 50, 50, 0.6);
+}
+
+.featured-image {
+    width: 10vh;
+    height: 10vh;
+    border-radius: 4px;
+    background-size: cover;
+    box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.5);
+    margin-right: 20px;
+    margin-left: 10px;
+}
+
+.App__nav-bar {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+.details {
+    max-width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.details span {
+    font-size: 14px;
+    color: grey;
+}
+
+.featured-image img {
+    width: 100%;
+    height: 100%;
+}
+
+.App__header{
+    align-items: center;
+    height: 120px;
+    color: white;
+    padding: 16px;
+}
+
+.App__section-header img {
+    height: 32px;
+    filter: invert(1);
+}
+
+.App__section-header img:hover {
+    cursor: pointer;
+}
+
+.rotate{
+    animation: rotate 1.5s linear infinite; 
+  }
+  @keyframes rotate{
+    to{ transform: rotate(360deg); }
+  }
+
+[hidden] {
+    display: none !important;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+   
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+
+    top: 100%;
+    left: 50%;
+    margin-left: -60px;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+    cursor: pointer !important;
+  }
+
+  .tooltip button {
+    background-color:   white;
+    width: 100%;
+    border-radius: 20px;
+    height: 40px;
+    text-transform: uppercase;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+
+  .tooltip button img {
+    height: 60%;
+  }
+
+  .tooltip button :disabled {
+    background-color: #2a2a2a;
+    color: white;
+  }
+
+  .getSpotifyTrackButton {
+    background-color: white;
+    width: 170px;
+    border-radius: 20px;
+    height: 28px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    font-size: 14px;
+    margin-top: 8px;
+  }
+  .getSpotifyTrackButton img{
+    height: 60%;
+  }
+

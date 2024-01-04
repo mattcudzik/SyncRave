@@ -1,0 +1,91 @@
+<div class="App">
+    <div class="App__top-bar"></div>
+    <div class="App__nav-bar">
+        <div class="App__categories-nav">
+            <section>
+                <div class="signin">
+                    <div class="content"> 
+                        <h2>Create new session:</h2>
+                        <form [formGroup]="createSessionForm" (ngSubmit)="onCreateSessionFormSubmit()" class="form">
+                            
+                            <div class="errorMsg" *ngIf="createSessionForm.get('name')?.touched && createSessionForm.get('name')?.invalid">
+                                <div *ngIf="createSessionForm.get('name')?.hasError('required')">Name is required.</div>
+                                <div *ngIf="createSessionForm.get('name')?.hasError('minlength')">Name should be at least 5 characters.</div>
+                                <div *ngIf="createSessionForm.get('name')?.hasError('maxlength')">Name should not exceed 20 characters.</div>
+                                <div *ngIf="createSessionForm.get('name')?.hasError('pattern')">Name should contain only letters and numbers.</div>
+                            </div>
+                            <div class="inputBox">
+                                <input type = "text" id="name" formControlName="name" required="true">  <i>Session name:</i>
+                            </div>
+                            
+                            <div class="errorMsg" *ngIf="createSessionForm.get('max_number_of_guests')?.invalid">
+                                <div *ngIf="createSessionForm.get('max_number_of_guests')?.hasError('required')">Max Number Of Guests is required.</div>
+                                <div *ngIf="createSessionForm.get('max_number_of_guests')?.hasError('min')">Minimum value allowed is 1.</div>
+                                <div *ngIf="createSessionForm.get('max_number_of_guests')?.hasError('max')">Maximum value allowed is 100.</div>
+                            </div>
+                            <div class="inputBox">
+                                <input type = "number" id="max_number_of_guests" formControlName="max_number_of_guests"> <i>Max number of guests</i>
+                            </div>
+
+                            <div class="errorMsg" *ngIf="createSessionForm.get('max_songs_per_guest')?.invalid">
+                                <div *ngIf="createSessionForm.get('max_songs_per_guest')?.hasError('min')">Minimum value allowed is -1.</div>
+                                <div *ngIf="createSessionForm.get('max_songs_per_guest')?.hasError('max')">Maximum value allowed is 10000000.</div>
+                            </div>
+                            <div class="inputBox">
+                                <input type = "number" id="max_songs_per_guest" formControlName="max_songs_per_guest"> <i>Max songs per guest (-1 if no limit)</i>
+                            </div>
+
+                            <div class="checkboxInputBox">
+                                <input type = "checkbox" id="ban_explicit_content" formControlName="ban_explicit_content"> <i>Ban explicit content</i>
+                                <span class="checkmark"></span>
+                            </div>
+
+                            <div class="checkboxInputBox">
+                                <input type = "checkbox" id="generate_playlist" formControlName="generate_playlist"> <i>Generate Spotify playlist</i>
+                                <span class="checkmark"></span>
+                            </div>
+                            <div class="errorMsg" *ngIf="errorMessage != undefined">
+                                {{errorMessage}}
+                            </div>
+
+                            <div class="inputBox"> 
+                                <input type="submit" value="CREATE SESSION" [disabled]="createSessionForm.invalid || disableButton">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+    </div>
+    <div class="App__main-view">
+        <div class="App__top-gradient"></div>
+        <div class="App__header-placeholder"></div>
+        <section class="App__section App__quick-links">
+            <h1>Your Sessions:</h1>
+            <div class="App__quick-links-container">
+
+                <app-loading class="App__quick-link" [hidden]="!isSessionLoading"></app-loading>
+                
+                <div class="App__quick-link" *ngFor="let session of sessions">
+                    <div class="App__quick-link-featured-img">♥</div>
+                    
+                    <div class="App__quick-link-item" style="flex-grow: 6;" routerLink="/session/{{session.id}}">
+                        <h3>{{session.name}}</h3>
+                    </div>
+                    <div class="App__quick-link-item" style="width: 25%;" routerLink="/session/{{session.id}}">
+                        <span>{{session.guests.length}} / {{session.properties.max_number_of_guests}}</span>
+                    </div>
+                    <div class="App__quick-link-item" style="width: 15%;">
+                        <img (click)="onDeleteSession(session.id)" src = "https://cdn-icons-png.flaticon.com/512/542/542724.png">
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="App__now-playing-bar">
+        <app-player></app-player>
+    </div>
+</div>
+
