@@ -1,4 +1,16 @@
-<img src="{{'data:image/jpg;base64,' + sessionDTO?.sessionInvitation?.qrCode}}">
-
-<h1>FULLSCREEN TEST</h1>
-<button (click)="buttonClick()">FULLSCREEN</button>
+<div class="App">
+    <div class="App__main-view">
+        <div class="App__top-gradient"></div>
+        <section class="App__section App__quick-links">
+            <img src="{{'data:image/jpg;base64,' + sessionDTO?.sessionInvitation?.qrCode}}">
+            <div class="code_container">
+                <span class="text">JOIN USING CODE:</span>
+                <span class="code">{{sessionDTO?.sessionInvitation?.code}}</span>
+            </div>
+        </section>
+    </div>
+    <div class="App__now-playing-bar">
+        <app-player></app-player>
+        <button (click)="buttonClick()">FULLSCREEN</button>
+    </div>
+</div>

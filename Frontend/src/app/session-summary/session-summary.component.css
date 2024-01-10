@@ -1,0 +1,35 @@
+.App__now-playing-bar {
+    display: flex;
+    background-color: rgb(27, 27, 27);
+    justify-content: space-between;
+}
+
+.App__main-view {
+    display: grid;
+}
+
+.App__section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.App__section > *{
+    margin: 0% 5%;
+}
+
+.App__section img {
+    width: 400px;
+    height: 400px;
+}
+
+.code_container {
+    display: grid;
+}
+
+.code_container .text {
+    font-size: 20pt;
+}
+.code_container .code {
+    font-size: 50pt;
+}

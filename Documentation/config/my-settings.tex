@@ -8,7 +8,14 @@
 % Tutaj proszę umieszczać swoje pakiety, makra, ustawienia itd.
 
 \usepackage[none]{hyphenat}
-\setlength{\parskip}{1em}
+\sloppy
+\usepackage{listings}
+\lstset{
+    literate=*{.}{{\textbf{.}}}1
+}
+
+
+
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % listingi i fragmentu kodu źródłowego 
